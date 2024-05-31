@@ -1,0 +1,11 @@
+* {
+    margin: 0;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}

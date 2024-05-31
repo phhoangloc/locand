@@ -1,0 +1,44 @@
+
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username":"lockheart",
+    "password":"123456"
+}
+###
+
+GET http://localhost:3000/api/auth/auth
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDM1OWEyMDAwODBjZDZmMzE1NWM2MCIsImlhdCI6MTY5ODY1MjczNywiZXhwIjoxNjk4NzM5MTM3fQ.yVxCv6RmCjVNQlel75Dliny2woeUeWSUOHb5lQR2_84
+
+###
+
+GET http://localhost:3000/api/auth/blog
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmVhZWQ3YzE1NGNjNDgyYzRhMzM5NSIsImlhdCI6MTY5ODI5ODQ1NywiZXhwIjoxNjk4Mzg0ODU3fQ.YYf1iMLsWhg0aQFgnwFReSBAUpoLnDDnJVelzLZZur8
+###
+
+POST http://localhost:3000/api/auth/blog
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmVhZWQ3YzE1NGNjNDgyYzRhMzM5NSIsImlhdCI6MTY5ODI5ODQ1NywiZXhwIjoxNjk4Mzg0ODU3fQ.YYf1iMLsWhg0aQFgnwFReSBAUpoLnDDnJVelzLZZur8
+
+{
+      "title": "những ngày gõ code",
+      "slug": "codingday",
+      "detail":"<h1>hello world</h1>"
+}
+###
+
+PUT http://localhost:3000/api/auth/blog?id=653a1f5a3a6a45ecc880698f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmVhZWQ3YzE1NGNjNDgyYzRhMzM5NSIsImlhdCI6MTY5ODI5ODQ1NywiZXhwIjoxNjk4Mzg0ODU3fQ.YYf1iMLsWhg0aQFgnwFReSBAUpoLnDDnJVelzLZZur8
+
+{
+    "cover":"/img/blog/asdfasdfasd.jpg"
+}
+###
+
+DELETE  http://localhost:3000/api/auth/book?id=653a231b3a6a45ecc88069e9
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmVhZWQ3YzE1NGNjNDgyYzRhMzM5NSIsImlhdCI6MTY5ODI5ODQ1NywiZXhwIjoxNjk4Mzg0ODU3fQ.YYf1iMLsWhg0aQFgnwFReSBAUpoLnDDnJVelzLZZur8
