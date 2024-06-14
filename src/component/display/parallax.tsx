@@ -3,7 +3,6 @@ import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 import store from '@/redux/store'
 import { useRouter } from 'next/navigation'
-import { color } from '@/style/theme'
 type Props = {
     data?: any[]
 }
@@ -21,6 +20,7 @@ const Parallax = ({ data }: Props) => {
 
 
     const parallax: any = useRef()
+    const parallaxChild: any = useRef()
 
     const [hover, setHover] = useState<boolean>(false)
     const [i, setI] = useState<number>(-1)
@@ -37,9 +37,10 @@ const Parallax = ({ data }: Props) => {
     }
 
     useEffect(() => {
-        parallax.current.scrollLeft = `${(2000 - window.innerWidth) / 2}`
-        parallax.current.scrollTop = `${(1500 - window.innerHeight) / 2}`
-    }, [])
+        parallaxChild.current?.clientWidth ? parallax.current.scrollLeft = `${(parallaxChild.current?.clientWidth - window.innerWidth) / 2}` : null
+        parallaxChild.current?.clientHeight ? parallax.current.scrollTop = `${(parallaxChild.current?.clientHeight - window.innerHeight) / 2}` : null
+    }, [parallaxChild.current?.clientWidth, parallaxChild.current?.clientHeight])
+
 
     const toPage = useRouter()
 
@@ -47,31 +48,37 @@ const Parallax = ({ data }: Props) => {
         width: "100%",
         height: "100vh",
         overflow: "auto",
-        userSelect: "none"
+        userSelect: "none",
+        // display: "flex",
+        // flexDirection: "column",
+        // justifyContent: "center"
     }
     const flexBox: React.CSSProperties = {
         display: "flex",
-        width: "2000px",
-        height: "1500px",
+        width: "3000px",
+        height: "max-content",
         flexWrap: "wrap",
         justifyContent: "center",
         cursor: mouseDown ? 'grabbing' : 'grab',
     }
 
     const itemBox: React.CSSProperties = {
-        width: "200px",
-        aspectRatio: 1,
-        margin: "auto 10px",
+        width: "max-content",
+        minWidth: "50px",
+        maxWidth: "350px",
+        height: "200px",
+        margin: "20px",
         borderRadius: "5px",
         padding: "5px",
         cursor: "pointer",
         transition: "all 0.25s",
-        boxShadow: "1px 1px 5px #888",
-        background: currentTheme ? color.background_light : color.background_dark,
+        boxShadow: "1px 1px 5px -2px #444",
     }
 
     const itemBoxHover: React.CSSProperties = {
-        transform: "scale(1.05)"
+        transform: "scale(1.15)",
+        boxShadow: "1px 1px 30px -15px #444",
+
     }
 
     const imageBox: React.CSSProperties = {
@@ -83,9 +90,9 @@ const Parallax = ({ data }: Props) => {
 
     const pBox: React.CSSProperties = {
         width: "100%",
-        lineHeight: "250%",
+        lineHeight: "1.5",
         userSelect: 'none',
-        fontSize: "0.8rem",
+        fontSize: "0.9rem",
         overflow: "hidden",
         textOverflow: "ellipsis",
     }
@@ -98,10 +105,10 @@ const Parallax = ({ data }: Props) => {
             onMouseMove={(e) => { mouseDown && onHandleMouseMove(e) }}
             onMouseUp={() => { setMountDown(false) }}
             onMouseLeave={() => setMountDown(false)}>
-            <div style={flexBox}>
+            <div className={`of-hidden ${currentTheme ? "parallax-gradiant-light" : "parallax-gradiant-dark"}`} ref={parallaxChild} style={flexBox}>
                 {
                     data ? data.map((item: any, index: number) =>
-                        <div
+                        <div className={`bglv1 animation-fdown-toup`}
                             key={index}
                             style={hover && i === index ? { ...itemBox, ...itemBoxHover } : { ...itemBox }}
                             onDoubleClick={() => item.genre && item.slug && toPage.push(`/home/${item.genre}/${item.slug}`)}
@@ -109,7 +116,7 @@ const Parallax = ({ data }: Props) => {
                             onMouseLeave={() => { setHover(false), setI(-1) }}>
                             <div style={imageBox}>
                                 {item.cover?.name ?
-                                    <Image src={process.env.ftp_url + item.cover?.name}
+                                    <Image src={"/cover/" + item.cover?.name}
                                         fill alt='cover'
                                         draggable="false"
                                         style={{
@@ -126,12 +133,18 @@ const Parallax = ({ data }: Props) => {
                                             borderRadius: "5px",
                                         }}
                                         sizes="100"
-                                        priority={false} />}
+                                        priority={false} />
+                                }
                             </div>
-                            <p
-                                title={item.name}
-                                style={pBox}
-                            >{item.name}</p>
+                            <div>
+                                <p className='tw-no'
+                                    title={item.name}
+                                    style={pBox}
+                                >{item.name}</p>
+                                <p
+                                    style={{ ...pBox, fontSize: "75%", textAlign: "center", opacity: "0.75" }}
+                                >{item.genre}</p>
+                            </div>
                         </div>) : null
                 }
             </div>

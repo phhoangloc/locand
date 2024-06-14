@@ -1,17 +1,7 @@
 import React from 'react'
-
+import LoadingCom from '@/component/admin/fixed/loadingCom'
 const Loading = () => {
-    return (
-        <div className='loading'>
-            <div className="items">
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
-            </div>
-        </div>
-    )
+    return <LoadingCom />
 }
 
 export default Loading

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { PayloadAction } from "@reduxjs/toolkit"
 const ThemeReducer = createSlice({
     name: "Theme",
-    initialState: false,
+    initialState: true,
     reducers: {
         setTheme: {
             reducer: (state: boolean, action: PayloadAction<boolean>) => {

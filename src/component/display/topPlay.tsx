@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRef } from 'react'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import { color } from '@/style/theme';
+
 type Props = {
     song: string
 }
@@ -42,8 +42,8 @@ const TopPlay = ({ song }: Props) => {
             <video style={{ width: "100%", borderRadius: "5px" }} ref={videoPlayer} src='/video/video_001.mp4' playsInline onEnded={(e) => { e.currentTarget.play() }} />
             <audio ref={audioPlayer} src={song} onEnded={() => end()} onTimeUpdate={() => timeUpdate()} autoPlay playsInline />
             <div style={{ position: "relative", height: "5px" }}>
-                <div style={{ position: "absolute", height: "100%", background: color.main, width: timeDuration + "%" }}></div>
-                <div style={{ position: "absolute", width: "10px", height: "10px", borderRadius: "50%", background: "white", top: "-2.5px", left: `calc(-2.5px + ${timeDuration}%)`, border: `1px solid ${color.main}`, }}></div>
+                <div style={{ position: "absolute", height: "100%", width: timeDuration + "%" }}></div>
+                <div style={{ position: "absolute", width: "10px", height: "10px", borderRadius: "50%", background: "white", top: "-2.5px", left: `calc(-2.5px + ${timeDuration}%)`, border: `1px solid `, }}></div>
             </div>
             <div style={{ textAlign: "center" }}>
                 {!onPlay ?

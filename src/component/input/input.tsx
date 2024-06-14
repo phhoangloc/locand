@@ -1,83 +1,70 @@
 'use client'
 import React, { useRef, useState } from 'react'
 import store from '@/redux/store'
-import { color } from '@/style/theme'
 type Props = {
     onChange: (e: string) => void,
     name: React.ReactNode,
     value: string,
     type?: string,
     onfocus?: () => void,
-    disabled?: boolean
+    disabled?: boolean,
+    sx?: string,
+
 }
 
-const Input = ({ onChange, name, value, type, onfocus, disabled }: Props) => {
-
-    const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
-
-    const update = () => {
-        store.subscribe(() => setCurrentTheme(store.getState().theme))
-    }
-
-    update()
+const Input = ({ onChange, name, value, type, onfocus, disabled, sx }: Props) => {
 
     const [focus, setFocus] = useState<boolean>(false)
 
     const box: React.CSSProperties = {
-        position: "relative",
-        width: "100%",
+        display: "flex",
         height: "50px",
-        borderRadius: "5px"
-    }
-    const title: React.CSSProperties = {
-        position: "absolute",
-        top: "10px",
-        left: "0px",
-        padding: "0 5px",
-        background: color.main,
-        color: "white",
-        fontSize: "15px",
-        borderTopLeftRadius: "5px",
-        borderBottomLeftRadius: "5px",
-        height: "40px",
-        lineHeight: "40px",
-        transition: "all 0.5s"
+        width: "100%",
+        borderRadius: "10px",
+        overflow: "hidden",
+        margin: "10px 0",
+        transition: "all 0.25s",
     }
 
-    const titleFocus: React.CSSProperties = {
-        top: 0,
-        height: "20px",
-        lineHeight: "20px",
-        borderBottomLeftRadius: "0px",
-        borderTopRightRadius: "5px",
-        fontSize: "13px",
+    const title: React.CSSProperties = {
+        width: "120px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        textAlign: "center",
+        fontWeight: "bold",
     }
 
     const inputBox: React.CSSProperties = {
-        width: "100%",
-        height: "40px",
+        width: "calc(100% - 102px)",
+        height: "calc(100% - 2px)",
         border: "none",
-        marginTop: "10px",
-        padding: "0px 5px 0",
-        background: "inherit",
-        fontSize: "0.9rem",
-        color: currentTheme ? color.main : color.background_light,
-        transition: "all 0.5s",
+        fontSize: "1rem",
+        padding: "0 25px",
+        // background: "white",
         boxSizing: "border-box",
+        borderTopRightRadius: "10px",
+        borderBottomRightRadius: "10px",
+        margin: "1px",
     }
 
     const inputBoxForcus: React.CSSProperties = {
-        height: "30px",
-        marginTop: "20px",
-        background: currentTheme ? color.background_light : color.background_dark,
-        border: `2px solid ${color.main}`
+        width: "calc(100% - 104px)",
+        height: "calc(100% - 4px)",
+        margin: "2px"
     }
 
+    const inputBoxDisable: React.CSSProperties = {
+        background: "inherit",
+        color: "inherit",
+    }
     return (
-        <div style={box}>
-            <p style={focus || value ? { ...title, ...titleFocus } : { ...title }}>{name}</p>
+        <div className={sx} style={{ ...box }}>
+            <p style={{ ...title }}>{name}</p>
             <input
-                style={focus || value ? { ...inputBox, ...inputBoxForcus } : { ...inputBox }}
+                className='bglv1'
+                style={disabled ? { ...inputBox, ...inputBoxDisable } : focus || (value) ? { ...inputBox, ...inputBoxForcus } : { ...inputBox }}
                 disabled={disabled ? disabled : false}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}

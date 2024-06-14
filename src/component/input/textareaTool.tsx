@@ -5,14 +5,15 @@ import AddLinkIcon from '@mui/icons-material/AddLink';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import { color } from '@/style/theme';
+
 
 type Props = {
     onChange: (e: string) => void,
     value: string,
+    sx?: string,
 }
 
-const TextAreaTool = ({ onChange, value }: Props) => {
+const TextAreaTool = ({ onChange, value, sx }: Props) => {
 
     const [currentTheme, setCurrentTheme] = useState<boolean>(store.getState().theme)
     const update = () => {
@@ -23,6 +24,8 @@ const TextAreaTool = ({ onChange, value }: Props) => {
     const inputRef = useRef<any>()
     const inputImgRef = useRef<any>()
     const inputLinkRef = useRef<any>()
+    const inputTableRow = useRef<any>()
+    const inputTableCol = useRef<any>()
 
     const [x, setX] = useState<number>(0)
     const [y, setY] = useState<number>(0)
@@ -34,26 +37,95 @@ const TextAreaTool = ({ onChange, value }: Props) => {
     const [imglink, setImgLink] = useState<string>("")
     const [link, setLink] = useState<string>("")
 
+    const [trow, setTrow] = useState<number>(0)
+    const [tcol, setTCol] = useState<number>(0)
+    const [focusInputRow, setFocusInputRow] = useState<boolean>(false)
 
     const createText = (value: string) => {
 
         const child = inputRef.current.childNodes[x]
-        if (inputRef?.current.innerText.trim() === "") {
+
+        if (!child || inputRef.current.innerHTML.trim() === "") {
             inputRef.current.innerHTML += `<div><${value}>${value}</${value}></div>`
+            const newchild = inputRef.current.childNodes[inputRef.current.childNodes.length - 1]
+
+            const selection = window.getSelection();
+            const newRange = document.createRange();
+            newchild && newRange.setStartAfter(newchild);
+            newchild && newRange.setEndAfter(newchild);
+
+            selection && selection.removeAllRanges();
+            selection && selection.addRange(newRange);
         } else {
             if (textSelect) {
                 child.innerHTML = `<${value}>${textSelect}</${value}>`
+                const selection = window.getSelection();
+                const newRange = document.createRange();
+                child && newRange.setStartAfter(child);
+                child && newRange.setEndAfter(child);
+
+                selection && selection.removeAllRanges();
+                selection && selection.addRange(newRange);
             } else {
-                if (child.innerText.trim() === "") {
+                if (child.innerHTML.trim() === "<br>") {
                     child.innerHTML = `<${value}>${value}</${value}>`
+                    const selection = window.getSelection();
+                    const newRange = document.createRange();
+                    child && newRange.setStartAfter(child);
+                    child && newRange.setEndAfter(child);
+                    selection && selection.removeAllRanges();
+                    selection && selection.addRange(newRange);
                 }
             }
 
 
         }
 
+
         inputRef.current ? onChange(inputRef.current.innerHTML) : null
         setTextSelect("")
+    }
+    const createTable = (r: number, c: number) => {
+
+        console.log(r, c)
+
+        // const child = inputRef.current.childNodes[x]
+        // if (inputRef?.current.innerText.trim() === "") {
+        //     inputRef.current.innerHTML += `<div style="display:flex"><h4>タイトル</h4><p>内容</p></div>`
+        // } else {
+        //     if (textSelect) {
+        //         child.innerHTML = `<div style="display:flex"><h4>${textSelect}</h4><p>内容</p></div>`
+        //     } else {
+        //         if (child.innerText.trim() === "") {
+        //             child.innerHTML = `<div style="display:flex"><h4>${textSelect}</h4><p>内容</p></div>`
+        //         }
+        //     }
+        // }
+
+        inputRef.current ? onChange(inputRef.current.innerHTML) : null
+        setTextSelect("")
+    }
+
+    const createRow = () => {
+        const child = inputRef.current.childNodes[x]
+        if (inputRef?.current.innerText.trim() === "") {
+            inputRef.current.innerHTML += `<div><h4 style="font-weight:normal"><span style="font-weight:bold;font-size:1rem;width:100px;display: inline-block">title</span> content</h4></div>`
+            const newchild = inputRef.current.childNodes[inputRef.current.childNodes.length - 1]
+
+            const selection = window.getSelection();
+            const newRange = document.createRange();
+            newchild && newRange.setStartAfter(newchild);
+            newchild && newRange.setEndAfter(newchild);
+
+            selection && selection.removeAllRanges();
+            selection && selection.addRange(newRange);
+        } else {
+            if (child.innerHTML.trim() === "<br>") {
+                child.innerHTML = `<h4 style="font-weight:normal"><span style="font-weight:bold;font-size:1rem;width:100px;display: inline-block">title</span> content</h4>`
+            }
+        }
+        inputRef.current ? onChange(inputRef.current.innerHTML) : null
+        setLink("")
     }
     const createLink = (value: string) => {
         const child = inputRef.current.childNodes[x]
@@ -64,9 +136,10 @@ const TextAreaTool = ({ onChange, value }: Props) => {
                 child.innerHTML = `<a href=${value} target="_blank">${textSelect}</a>`
             } else {
                 if (child.innerText.trim() === "") {
-                    child.innerHTML = `<div><a href=${value} target="_blank">${value}</a></div>`
+                    child.innerHTML = `<a href=${value} target="_blank">${value}</a>`
                 }
             }
+            inputRef.current ? onChange(inputRef.current.innerHTML) : null
             setFocusInputLink(false)
             setLink("")
 
@@ -75,7 +148,13 @@ const TextAreaTool = ({ onChange, value }: Props) => {
     }
     const createImage = (type: string, value: string) => {
         const child = inputRef.current.childNodes[x]
-        child ? child.innerHTML += `<${type} style="width:100%" src=${value}></${type}>` : inputRef.current.innerHTML += `<div><${type} style="width:100%" src=${value}></${type}></div>`
+        if (inputRef?.current.innerText.trim() === "") {
+            inputRef.current.innerHTML += `<${type} style="width:100%" src=${value}></${type}>`
+        } else {
+            // if (child.innerText.trim() === "") {
+            child.innerHTML = `<${type} style="width:100%" src=${value}></${type}>`
+            // }
+        }
         inputRef.current ? onChange(inputRef.current.innerHTML) : null
         setFocusInputImg(false)
         setImgLink("")
@@ -102,19 +181,21 @@ const TextAreaTool = ({ onChange, value }: Props) => {
             node = node.parentNode;
         }
         setX(index);
+
     }
 
     const box: React.CSSProperties = {
-        padding: "5px",
+        padding: "1px",
         margin: "10px 0",
         transition: "all 0.25s",
+        borderRadius: "5px"
     }
     const boxFocus: React.CSSProperties = {
         padding: "5px",
-        background: currentTheme ? color.background_light : color.background_dark,
-        color: currentTheme ? color.main : color.background_light,
     }
     const tool: React.CSSProperties = {
+        position: "sticky",
+        top: "50px",
         display: "flex",
         flexWrap: "wrap",
     }
@@ -127,9 +208,8 @@ const TextAreaTool = ({ onChange, value }: Props) => {
         borderRadius: "5px",
         cursor: "pointer",
         boxSizing: "border-box",
-        boxShadow: "2px 2px 4px -2px #888",
         transition: "all 0.25s",
-        marginRight: "5px"
+        marginRight: "5px",
     }
 
     const icon: React.CSSProperties = {
@@ -142,26 +222,24 @@ const TextAreaTool = ({ onChange, value }: Props) => {
         boxSizing: "border-box",
         padding: "5px",
         marginRight: "5px",
-        boxShadow: "2px 2px 4px -2px #888",
         transition: "all 0.25s",
     }
 
     const buttonFocus: React.CSSProperties = {
-        background: color.main,
-        color: color.background_light
     }
 
     const input: React.CSSProperties = {
         width: "0px",
-        height: "40px",
+        height: "35px",
         boxSizing: "border-box",
-        margin: "0px",
+        margin: "auto 0",
         padding: 0,
-        color: currentTheme ? color.dark : color.light,
-        background: currentTheme ? color.light : color.dark,
         border: "none",
         transition: "all 0.5s",
         borderRadius: "5px",
+    }
+    const inputNumber: React.CSSProperties = {
+        width: "40px"
     }
     const inputFocus: React.CSSProperties = {
         width: "150px"
@@ -169,21 +247,27 @@ const TextAreaTool = ({ onChange, value }: Props) => {
 
     const inputBox: React.CSSProperties = {
         minHeight: "300px",
-        padding: "10px 5px"
+        padding: "10px 5px",
+        marginTop: "10px",
+        borderRadius: "5px"
+    }
+    const inputBoxFocus: React.CSSProperties = {
     }
 
     return (
-        <div style={focus || inputRef?.current?.innerHTML ? { ...box, ...boxFocus } : { ...box }}>
-            <div style={{ ...tool }}>
+        <div className={sx} style={focus || inputRef?.current?.innerHTML ? { ...box, ...boxFocus } : { ...box }} >
+            <div className={sx} style={{ ...tool }}>
                 <p style={focus || inputRef?.current?.innerHTML ? { ...button, ...buttonFocus } : button} onClick={() => createText("h1")}>h1</p>
                 <p style={focus || inputRef?.current?.innerHTML ? { ...button, ...buttonFocus } : button} onClick={() => createText("h2")}>h2</p>
                 <p style={focus || inputRef?.current?.innerHTML ? { ...button, ...buttonFocus } : button} onClick={() => createText("h3")}>h3</p>
                 <p style={focus || inputRef?.current?.innerHTML ? { ...button, ...buttonFocus } : button} onClick={() => createText("h4")}>h4</p>
                 <p style={focus || inputRef?.current?.innerHTML ? { ...button, ...buttonFocus } : button} onClick={() => createText("p")}>p</p>
+                <p style={focus || inputRef?.current?.innerHTML ? { ...button, ...buttonFocus } : button} onClick={() => createRow()}>row</p>
                 <div style={{ display: "flex" }}>
                     <input ref={inputLinkRef}
                         style={focusInputLink ? { ...input, ...inputFocus } : { ...input }}
                         placeholder='url link' onChange={(e) => setLink(e.target.value)}
+                        value={link}
                         onFocus={(e) => { setFocusInputLink(true), e.target.style.outline = 'none' }}></input>
                     {focusInputLink ?
                         <CheckIcon
@@ -201,6 +285,7 @@ const TextAreaTool = ({ onChange, value }: Props) => {
                     <input ref={inputImgRef}
                         style={focusInputImg ? { ...input, ...inputFocus } : { ...input }}
                         placeholder='img link' onChange={(e) => setImgLink(e.target.value)}
+                        value={imglink}
                         onFocus={(e) => { setFocusInputImg(true), e.target.style.outline = 'none' }}></input>
                     {focusInputImg ?
                         <CheckIcon
@@ -214,9 +299,40 @@ const TextAreaTool = ({ onChange, value }: Props) => {
                             style={focus || inputRef?.current?.innerHTML ? { ...icon, ...buttonFocus } : icon}
                             onClick={() => { inputImgRef.current?.focus() }} />}
                 </div>
+                {/* <div style={{ display: "flex" }}>
+                    <input
+                        ref={inputTableRow}
+                        type='number'
+                        style={focusInputRow ? { ...input, ...inputNumber } : { ...input }}
+                        placeholder='row'
+                        onChange={(e) => setTrow(e.target.valueAsNumber)}
+                        onFocus={(e) => { setFocusInputRow(true), e.target.style.outline = 'none' }}>
+                    </input>
+                    <input
+                        ref={inputTableCol}
+                        type='number'
+                        style={focusInputRow ? { ...input, ...inputNumber } : { ...input }}
+                        placeholder='col'
+                        onChange={(e) => setTCol(e.target.valueAsNumber)}
+                        onFocus={(e) => { e.target.style.outline = 'none' }}>
+                    </input>
+                    {focusInputRow ?
+                        <CheckIcon
+                            style={focus || inputRef?.current?.innerHTML ? { ...icon, ...buttonFocus } : icon}
+                            onClick={() => { createTable(trow, tcol), setFocusInputRow(false), setTrow(0), setTCol(0) }} />
+                        :
+                        null}
+                    {focusInputRow ?
+                        <CloseIcon
+                            style={focus || inputRef?.current?.innerHTML ? { ...icon, ...buttonFocus } : icon}
+                            onClick={() => { setTrow(0), setTCol(0), setFocusInputRow(false) }} /> :
+                        <GridViewIcon
+                            style={focus || inputRef?.current?.innerHTML ? { ...icon, ...buttonFocus } : icon}
+                            onClick={() => { inputTableRow.current?.focus() }} />}
+                </div> */}
             </div>
-            <div ref={inputRef}
-                style={{ ...inputBox }}
+            <div className={`bglv1 ta-j`} ref={inputRef}
+                style={focus || inputRef?.current?.innerHTML ? { ...inputBox, ...inputBoxFocus } : { ...inputBox }}
                 contentEditable={true}
                 onInput={(e) => onChange(e.currentTarget.innerHTML)}
                 onFocus={(e) => { setFocus(true), e.target.style.outline = 'none'; }}
