@@ -42,8 +42,8 @@ const Page = ({ params }: Props) => {
     }
     const toPage = useRouter()
 
-    const getItem = async (a: string, s: string) => {
-        const result = await NoUserAuthen.getOneItem(a, s)
+    const getItem = async (p: string, a: string, s: string) => {
+        const result = await UserAuthen.getOneItembySlug(p, a, s)
         if (result.success && result.data[0]) {
             setId(result.data[0]._id)
             setName(result.data[0].name)
@@ -57,7 +57,7 @@ const Page = ({ params }: Props) => {
     }
 
     useEffect(() => {
-        getItem("blog", params.slug)
+        getItem(currentUser.position, "blog", params.slug)
     }, [])
 
     const createNewItem = async (p: string, a: string, body: any) => {
@@ -95,12 +95,12 @@ const Page = ({ params }: Props) => {
                         <Link
                             href={'/home/blog/preview_ad31'}
                             target='_blank'>
-                            <p className='hover-link' onClick={() => { updateItem(currentUser.position, "blog", "666bb968680cd4469b034ade", { title: name, slug: "previewad_31", content: newContent || content },) }}>{'/home/blog/previewad31'}</p>
+                            <p className='hover-link' onClick={() => { updateItem(currentUser.position, "blog", "666bb968680cd4469b034ade", { name, slug: "preview_ad31", detail: newContent || content },) }}>{'/home/blog/preview_ad31'}</p>
                         </Link> :
                         <Link
                             href={'/home/blog/preview_ad31'}
                             target='_blank'>
-                            <p className='hover-link' onClick={() => { updateItem(currentUser.position, "blog", "666bb968680cd4469b034ade", { title: name, slug: "previewad_31", content: newContent || content },) }}>preview</p>
+                            <p className='hover-link' onClick={() => { updateItem(currentUser.position, "blog", "666bb968680cd4469b034ade", { name, slug: "preview_ad31", detail: newContent || content },) }}>preview</p>
                         </Link>
                     }
 
@@ -111,7 +111,9 @@ const Page = ({ params }: Props) => {
                     <Input name="slug" onChange={(v) => setSlug(v)} value={slug} sx='bg-main' />
                     <TextAreaTool onChange={(v: any) => setNewContent(v)} value={content} sx="bg-main" />
                     <div className='dp-flex'>
-                        {id ? <Button name='save' onClick={() => updateItem(currentUser.position, "blog", id, body)} sx="bg-main mg-5px" /> : <Button sx="bg-main" name='create' onClick={() => createNewItem(currentUser.position, "blog", body)} />}
+                        {id ?
+                            <Button name='save' onClick={() => updateItem(currentUser.position, "blog", id, body)} sx="bg-main mg-5px" /> :
+                            <Button sx="bg-main" name='create' onClick={() => createNewItem(currentUser.position, "blog", body)} />}
                         {id ? <Button name='delete' onClick={() => deleteItem(currentUser.position, "blog", id)} sx="bg-main mg-5px" /> : null}
                     </div>
                 </div>

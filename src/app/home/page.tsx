@@ -7,22 +7,26 @@ type Props = {}
 
 const Page = (props: Props) => {
 
-    const [data, setData] = useState<any[]>([])
+    const [book, setBook] = useState<any[]>([])
+    const [blog, setBlog] = useState<any[]>([])
 
     const getData = async (a: string) => {
         const result = await NoUserAuthen.getItem(a, undefined, undefined)
         if (result.success) {
-            setData(result.data)
+            a === "book" && setBook(result.data)
+            a === "blog" && setBlog(result.data)
         } else {
-            setData([])
+            setBook([])
+            setBlog([])
         }
     }
 
     useEffect(() => {
         getData("blog")
+        getData("book")
     }, [])
     return (
-        <Parallax data={data} />
+        <Parallax data={[...book, ...blog]} />
     )
 }
 

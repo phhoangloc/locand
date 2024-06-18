@@ -31,8 +31,8 @@ const Page = ({ params }: Props) => {
             <div className='animation-change-page bglv1 of-hidden'></div>
             <div className='xs12 md6'>
                 <div className='ps-re h300px ps-st top-100vh-300px mg-5p'>
-                    {item.cover?.name ?
-                        <Image src={"/cover/" + item.cover?.name}
+                    {item?.cover?.name ?
+                        <Image src={"/cover/" + item?.cover?.name}
                             fill alt='cover'
                             draggable="false"
                             style={{
@@ -56,9 +56,9 @@ const Page = ({ params }: Props) => {
             <div className='xs12 md6'>
                 <div className='bglv1 pd-5p ta-j'>
                     <div className='h100h dp-flex fd-col jc-center ta-center fos-90p bor-bot-1px'>
-                        <h1>{item.name}</h1>
+                        <h1>{item?.name}</h1>
                     </div>
-                    <div dangerouslySetInnerHTML={{ __html: item.detail }} />
+                    <div dangerouslySetInnerHTML={{ __html: item?.detail }} />
                 </div>
             </div>
         </div>

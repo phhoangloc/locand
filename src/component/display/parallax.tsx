@@ -49,9 +49,6 @@ const Parallax = ({ data }: Props) => {
         height: "100vh",
         overflow: "auto",
         userSelect: "none",
-        // display: "flex",
-        // flexDirection: "column",
-        // justifyContent: "center"
     }
     const flexBox: React.CSSProperties = {
         display: "flex",
@@ -67,17 +64,17 @@ const Parallax = ({ data }: Props) => {
         minWidth: "50px",
         maxWidth: "350px",
         height: "200px",
-        margin: "20px",
+        margin: " 50px 20px",
         borderRadius: "5px",
         padding: "5px",
         cursor: "pointer",
         transition: "all 0.25s",
-        boxShadow: "1px 1px 5px -2px #444",
+        boxShadow: "0px 2px 5px -2px #444",
     }
 
     const itemBoxHover: React.CSSProperties = {
-        transform: "scale(1.15)",
-        boxShadow: "1px 1px 30px -15px #444",
+        transform: "scale(1.1)",
+        boxShadow: "1px 1px 20px -5px #444",
 
     }
 
@@ -105,7 +102,7 @@ const Parallax = ({ data }: Props) => {
             onMouseMove={(e) => { mouseDown && onHandleMouseMove(e) }}
             onMouseUp={() => { setMountDown(false) }}
             onMouseLeave={() => setMountDown(false)}>
-            <div className={`of-hidden ${currentTheme ? "parallax-gradiant-light" : "parallax-gradiant-dark"}`} ref={parallaxChild} style={flexBox}>
+            <div className={`of-hidden parallax-gradiant`} ref={parallaxChild} style={flexBox}>
                 {
                     data ? data.map((item: any, index: number) =>
                         <div className={`bglv1 animation-fdown-toup`}

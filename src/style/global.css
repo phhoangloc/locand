@@ -2,9 +2,9 @@
 
 :root {
   --light: #f9f2ec;
-  --dark: #261a0d;
+  --dark: #0c0600;
   --main: #996633;
-  --background_light: #ffffff;
+  --background_light: #fff;
   --background_dark: #130d06;
 }
 
@@ -46,20 +46,36 @@ div {
   color: white;
 }
 
-.parallax-gradiant-light {
+.themelight .parallax-gradiant {
   background: linear-gradient(#fff, #f9f2ec);
-  background-size: 100% 240px;
+  background-size: 100% 300px;
   background-repeat: repeat;
 }
 
-.parallax-gradiant-dark {
-  background: linear-gradient(#130d06, #261a0d);
-  background-size: 100% 240px;
+.themelight .content-gradiant {
+  background: linear-gradient(#fff, #f9f2ec);
+  background-size: 100%;
+  background-repeat: repeat;
+}
+
+.themedark .parallax-gradiant {
+  background: linear-gradient(#130d06, #0c0600);
+  background-size: 100% 300px;
+  background-repeat: repeat;
+}
+
+.themedark .content-gradiant {
+  background: linear-gradient(#130d06, #0c0600);
+  background-size: 100%;
   background-repeat: repeat;
 }
 
 .filter-brightness-90p {
   backdrop-filter: blur(1px) brightness(0.9);
+}
+
+.filter-brightness-50p {
+  backdrop-filter: blur(1px) brightness(0.5);
 }
 
 .svg50 svg {
@@ -83,6 +99,10 @@ div {
 
 .mh100h {
   min-height: 100vh;
+}
+
+.mh300px {
+  min-height: 300px;
 }
 
 .w100p {
@@ -209,6 +229,10 @@ div {
 
 .mg-10px-auto {
   margin: 10px auto;
+}
+
+.mg-10px-0px {
+  margin: 10px 0px;
 }
 
 .mg-10px {
@@ -393,6 +417,12 @@ div {
   font-size: 70%;
 }
 
+/* font-weight */
+
+.fow-b {
+  font-weight: bold;
+}
+
 /* text */
 
 .ta-center {
@@ -491,6 +521,16 @@ div {
 /* overflow */
 .of-hidden {
   overflow: hidden;
+}
+
+.of-auto {
+  overflow: auto;
+}
+
+.dangerousBox {
+  letter-spacing: 0.5px;
+  text-align: justify;
+  line-height: 1.35;
 }
 
 @keyframes fdown-toup {

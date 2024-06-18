@@ -25,7 +25,7 @@ const Header = (props: Props) => {
     })
 
     return (
-        <div className={`w100p h50px ps-f top-0px  zi-2 opacity-1-10 hover-opacity cs-p trss-1-4 bglv1`} >
+        <div className={`w100p h50px ps-f top-0px  zi-2 opacity-1-10 hover-opacity cs-p trss-1-4 `} >
             <div className='dp-flex jc-sp-bw w100p mw-1200px mg-auto'>
                 <div className="svg50"><MenuIcon /></div>
                 <h1 className='dp-flex fd-col jc-center'>locand</h1>
