@@ -33,7 +33,7 @@ const Header = (props: Props) => {
             <div className="flex">
                 {currentUser?.id ?
                     <IconDrop
-                        icon={currentUser?.avata ? <Image src={process.env.ftp_url + currentUser.avata.name} fill className='object-cover cursor-pointer' alt='avata' /> : <PersonIcon className='!w-auto !h-full p-2 cursor-pointer' />}
+                        icon={currentUser?.avata ? <Image src={process.env.ftp_url + currentUser.avata.name} fill className='object-cover cursor-pointer' alt='avata' /> : <PersonIcon className='!w-auto !h-full  cursor-pointer' />}
                         data={[
                             {
                                 title: "Profile",

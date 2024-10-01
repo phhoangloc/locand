@@ -68,7 +68,6 @@ const Signup = ({ }: Props) => {
     const signup = async (body: { username: string, password: string, email: string }) => {
         setLoading(true)
         const result = await ApiSignup(body)
-        console.log(result)
         if (result.success) {
             setUsername("")
             setPassword("")

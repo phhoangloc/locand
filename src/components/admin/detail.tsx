@@ -7,13 +7,13 @@ import Button from '../tool/input/button';
 import { setNotice } from '@/redux/reducer/noticeReducer';
 import TextAreaTool from '../tool/input/textareaTool';
 import { ApiItem } from '@/api/client';
-import { ApiCreateItem, ApiItemUser, ApiUpdateItem } from '@/api/user';
+import { ApiChangeMail, ApiChangePasword, ApiCreateItem, ApiItemUser, ApiUpdateItem } from '@/api/user';
 import EditPicture, { EditAvatar, ImportManyPicture } from '../tool/picture/editPicture';
 import axios from 'axios';
 import { setAlert } from '@/redux/reducer/alertReducer';
 import { setRefresh } from '@/redux/reducer/RefreshReduce';
 import ImageModal from '../modal/imageModal';
-
+import Select from '../tool/input/select';
 type Props = {
     path1: string,
     path2: string
@@ -229,8 +229,7 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     const [avata, setAvata] = useState<any>()
     const [avataId, setAvataId] = useState<string>("")
     const [position, setPosition] = useState<string>("")
-
-
+    const [active, setActive] = useState<boolean>(true)
 
 
     const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -242,7 +241,9 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     const body = {
         coverId: coverId,
         avataId: avataId,
-        username
+        username,
+        position,
+        active
     }
 
     const getProfileById = async (id: string) => {
@@ -255,6 +256,7 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
             setCoverId(result.data?.[0]?.coverId)
             setAvataId(result.data?.[0]?.avataId)
             setPosition(result.data?.[0]?.position)
+            setActive(result.data?.[0]?.active)
         } else {
             setUserName("")
             setEmail("")
@@ -270,13 +272,13 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     const updateProfile = async (id: string, body: any) => {
         const result = await ApiUpdateItem({ position: currentUser.position, genre: "user", id }, body)
         if (result.success) {
-            store.dispatch(setNotice({ success: result.success, msg: "success", open: true }))
+            store.dispatch(setNotice({ success: result.success, msg: result.msg, open: true }))
             store.dispatch(setRefresh())
             setTimeout(() => {
                 store.dispatch(setNotice({ success: false, msg: "", open: false }))
             }, 3000)
         } else {
-            store.dispatch(setNotice({ success: result.success, msg: "failed", open: true }))
+            store.dispatch(setNotice({ success: result.success, msg: result.msg, open: true }))
             setTimeout(() => {
                 store.dispatch(setNotice({ success: false, msg: "", open: false }))
             }, 3000)
@@ -302,19 +304,33 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     }, [avataId, coverId])
 
     const sendMailToChangeEmail = async (email: string) => {
-        const result = await axios.post(process.env.server_url + "sendmaitochangeemail", { email })
-        if (result.data) {
-            store.dispatch(setAlert({ open: true, msg: result.data.msg, value: false }))
+        const result = await ApiChangeMail({ position: currentUser.position }, { email: email })
+        console.log(result)
+        if (result.success) {
+            store.dispatch(setNotice({ open: true, msg: result.msg, success: result.success }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: result.success, msg: "", open: false }))
+            }, 3000)
+
         } else {
-            store.dispatch(setAlert({ open: true, msg: result.data.msg, value: false }))
+            store.dispatch(setNotice({ open: true, msg: result.msg, success: result.success }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: result.success, msg: "", open: false }))
+            }, 3000)
         }
     }
     const sendMailToChangePassword = async (email: string) => {
-        const result = await axios.post(process.env.server_url + "sendmaitochangepassword", { email })
-        if (result.data) {
-            store.dispatch(setAlert({ open: true, msg: result.data.msg, value: false }))
+        const result = await ApiChangePasword({ position: currentUser.position }, { email: email })
+        if (result.success) {
+            store.dispatch(setNotice({ open: true, msg: result.msg, success: result.success }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: result.success, msg: "", open: false }))
+            }, 3000)
         } else {
-            store.dispatch(setAlert({ open: true, msg: result.data.msg, value: false }))
+            store.dispatch(setNotice({ open: true, msg: result.msg, success: result.success }))
+            setTimeout(() => {
+                store.dispatch(setNotice({ success: result.success, msg: "", open: false }))
+            }, 3000)
         }
     }
 
@@ -331,7 +347,6 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
                 </div>
                 <div className="w-full mt-[-10%]">
                     <EditAvatar src={avata?.name ? process.env.ftp_url + avata?.name : undefined} setPictureModal={() => { setModalOpen(true), setIsUpdateCover(false), setIsUpdateAvata(true) }} />
-
                 </div>
                 <div className="w-max m-auto py-10 text-center">
                     <h2 className='font-bold text-xl mb-1'>{username}</h2>
@@ -348,6 +363,38 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
                     <Input name="current email" sx='bg-white dark:bg-slate-800 shadow !w-full' onChange={(v) => setEmail(v)} value={email} disabled={true} />
                     <Button onClick={() => sendMailToChangePassword(email)} name="send" sx="!my-0 !ml-1" />
                 </div>
+                {currentUser.position === "admin" && <div className='mb-1'>position</div>}
+                {currentUser.position === "admin" && <div className="flex">
+                    <Select data={
+                        [{
+                            title: "admin",
+                            func: (v) => setPosition(v)
+                        },
+                        {
+                            title: "user",
+                            func: (v) => setPosition(v)
+                        },]
+                    }
+                        title={position}
+                        sx="!w-24"
+                    />
+                </div>}
+                {currentUser.position === "admin" && <div className='mb-1'>active</div>}
+                {currentUser.position === "admin" && <div className="flex">
+                    <Select data={
+                        [{
+                            title: "true",
+                            func: (v) => setActive(true)
+                        },
+                        {
+                            title: "false",
+                            func: (v) => setActive(false)
+                        },]
+                    }
+                        title={active.toString()}
+                        sx="!w-24"
+                    />
+                </div>}
             </div>
             <div className=''>
                 <Button onClick={() => updateProfile(path2, body)} name="save" sx="bg-main mg-5px-0px" />

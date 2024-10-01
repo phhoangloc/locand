@@ -37,7 +37,11 @@ const Menu = (props: Props) => {
             title: "User",
             func: () => { toPage.push("/admin/user") },
         },
-
+        {
+            icon: <ImageIcon className='!w-12 !h-auto p-2' />,
+            title: "Media",
+            func: () => { toPage.push("/admin/media") },
+        },
     ]
     return (
         <div className='w-full bg-white dark:bg-slate-800 md:!bg-inherit rounded h-full '>

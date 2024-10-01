@@ -108,3 +108,29 @@ export const ApiUploadFile = async ({ position, genre, file }: BodyTypeWithPosit
     })
     return fileUpload
 }
+export const ApiChangeMail = async ({ position }: BodyTypeWithPosition, body: any) => {
+    const result = await axios.post(process.env.api_url + "api/" +
+        position +
+        "/sendmailtochangeemail",
+        body,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage && localStorage.token
+            },
+        })
+    return (result.data)
+}
+export const ApiChangePasword = async ({ position }: BodyTypeWithPosition, body: any) => {
+    const result = await axios.post(process.env.api_url + "api/" +
+        position +
+        "/sendmailtochangepassword",
+        body,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage && localStorage.token
+            },
+        })
+    return (result.data)
+}

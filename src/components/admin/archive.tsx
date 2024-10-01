@@ -140,7 +140,7 @@ export const Archive = ({ genre }: Props) => {
                 </div>
                 {items?.length ?
                     items.map((n: any, index: number) =>
-                        <div key={index} className={`flex h-12 transition duration-200 ruonded border-b-[1px] border-slate-100 dark:border-slate-800 even:bg-slate-100 dark:even:bg-slate-800 hover:!bg-slate-200 dark:hover:!bg-slate-500`} >
+                        <div key={index} className={`flex h-12 transition duration-200 ruonded border-b-[1px] border-slate-100 dark:border-slate-800 even:bg-slate-100 even:dark:bg-slate-700 hover:!bg-slate-200 dark:hover:!bg-slate-500`} >
                             <LabelOutlinedIcon className='!w-auto !h-full p-3 hidden md:block' />
                             <div className="w-full h-full  flex flex-col justify-center px-1 cursor-pointer text-sm md:text-base">
                                 <h4 title={n.name} className={`truncate`}
@@ -166,7 +166,6 @@ export const Archive = ({ genre }: Props) => {
                     <div className='flex h-12 justify-between relative p-2'>there are no {genre}</div>}
                 <Pagination page={page} next={() => setPage(p => p + 1)} prev={() => setPage(p => p - 1)} end={isEnd} />
             </div>
-
     )
 }
 

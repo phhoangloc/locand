@@ -26,7 +26,7 @@ export const IconDrop = ({ icon, data }: IconDropType) => {
             <div className='relative h-8 w-8 rounded-[50%] overflow-hidden m-2 ' onClick={() => { setDrop(!drop) }}>
                 {icon}
             </div>
-            <div className={`absolute transition-all duration-500 right-1 top-12 min-w-32  overflow-hidden shadow-lg z-10 bg-white dark:bg-slate-800 rounded ${drop ? "h-" + `${data?.length ? data.length * 12 : 0}` : "h-0"}`} >
+            <div className={`absolute transition-all duration-500 right-1 top-12 min-w-32  overflow-hidden shadow-lg shadow-slate-200 dark:shadow-slate-900 z-10 bg-white dark:bg-slate-800 rounded  ${drop ? "h-" + `${data?.length ? data.length * 12 : 0}` : "h-0"}`} >
                 {data?.length ? data.map((d: any, index: number) =>
                     <div key={index} className='flex opacity-50 hover:opacity-100 p-1 box-border h-12 w-full cursor-pointer ' onClick={() => { d.func && d.func(), setDrop(false) }}>
                         {d?.icon}

@@ -27,7 +27,7 @@ export const ApiSignup = async (body: { username: string, password: string, emai
 export const ApiItem = async ({ genre, search, id, slug, sort, skip, limit }: BodyType) => {
     try {
         const result = await axios.get(process.env.api_url + "api/" +
-            "/" + genre +
+            genre +
             "?genre=" + genre +
             "&search=" + `${search ? search : ""}` +
             "&id=" + `${id ? id : ""}` +
