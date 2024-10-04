@@ -1,6 +1,5 @@
-"use client"
-import React, { useState, useEffect } from 'react'
-import store from '@/redux/store'
+
+import React from 'react'
 type Props = {}
 
 const Page = (props: Props) => {

@@ -5,6 +5,7 @@ import Signup from '@/components/admin/signup'
 import { Archive, ArchivePic } from '@/components/admin/archive'
 import store from '@/redux/store'
 import { EditDetailById } from '@/components/admin/detail'
+import NotFound from '@/components/admin/notfound'
 type Props = {
     params: { archive: string }
 }
@@ -28,14 +29,14 @@ const Page = ({ params }: Props) => {
             return (
                 <Signup />
             )
-
         case "blog":
+        case "page":
             return (
-                <Archive genre={params.archive} />
+                <Archive archive={params.archive} />
             )
         case "user":
             return (
-                currentUser?.position === "admin" ? <Archive genre="user" /> : <EditDetailById path1='user' path2={currentUser?.id} />
+                currentUser?.position === "admin" ? <Archive archive="user" /> : <EditDetailById path1='user' path2={currentUser?.id} />
             )
         case "media":
             return (
@@ -45,9 +46,8 @@ const Page = ({ params }: Props) => {
             return (
                 <EditDetailById path1={"user"} path2={currentUser.id} />
             )
-
         default:
-            return "NOT FOUND"
+            return <NotFound />
     }
 
 }

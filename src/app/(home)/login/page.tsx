@@ -1,4 +1,4 @@
-import Login from '@/components/home/login'
+import Login from '@/components/admin/login'
 import React from 'react'
 
 type Props = {}

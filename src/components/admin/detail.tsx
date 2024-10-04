@@ -14,6 +14,8 @@ import { setAlert } from '@/redux/reducer/alertReducer';
 import { setRefresh } from '@/redux/reducer/RefreshReduce';
 import ImageModal from '../modal/imageModal';
 import Select from '../tool/input/select';
+import NotFound from './notfound';
+import Textarea from '../tool/input/textarea';
 type Props = {
     path1: string,
     path2: string
@@ -80,8 +82,8 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
     const toPage = useRouter()
 
     const getItems = async (p: string, a: string, s: string) => {
-        const result = await ApiItemUser({ position: p, genre: a, slug: s })
-        if (result.success && result.data[0].id) {
+        const result = await ApiItemUser({ position: p, archive: a, slug: s })
+        if (result.success && result.data[0]) {
             setId(result.data[0].id)
             setName(result.data[0].name)
             setSlug(result.data[0].slug)
@@ -98,17 +100,17 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
 
     const createNewItem = async (p: string, g: string, body: any) => {
         if (body.name && body.slug) {
-            const result = await ApiCreateItem({ position: p, genre: g }, body)
+            const result = await ApiCreateItem({ position: p, archive: g }, body)
             setSaving(true)
             if (result.success) {
-                store.dispatch(setNotice({ success: false, msg: result.message, open: true }))
+                store.dispatch(setNotice({ success: false, msg: result.msg, open: true }))
                 setTimeout(() => {
                     setSaving(false)
                     store.dispatch(setNotice({ success: false, msg: "", open: false }))
                     toPage.push("/admin/" + g)
                 }, 3000)
             } else {
-                store.dispatch(setNotice({ success: false, msg: result.message, open: true }))
+                store.dispatch(setNotice({ success: false, msg: result.msg, open: true }))
             }
         } else {
             store.dispatch(setNotice({ success: false, msg: "you must input title and slug", open: true }))
@@ -119,16 +121,16 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
     }
     const updateAnItem = async (p: string, g: string, id: string, body: any) => {
         setSaving(true)
-        const result = await ApiUpdateItem({ position: p, genre: g, id: id }, body)
+        const result = await ApiUpdateItem({ position: p, archive: g, id: id }, body)
         if (result.success) {
-            store.dispatch(setNotice({ success: false, msg: result.message, open: true }))
+            store.dispatch(setNotice({ success: false, msg: result.msg, open: true }))
             setTimeout(() => {
                 setSaving(false)
                 store.dispatch(setNotice({ success: false, msg: "", open: false }))
                 toPage.push("/admin/" + g)
             }, 3000)
         } else {
-            store.dispatch(setNotice({ success: false, msg: result.message, open: true }))
+            store.dispatch(setNotice({ success: false, msg: result.msg, open: true }))
             setTimeout(() => {
                 setSaving(false)
                 store.dispatch(setNotice({ success: false, msg: "", open: false }))
@@ -138,7 +140,7 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
 
     useEffect(() => {
         const getPicture = async (id: number) => {
-            const result = await ApiItem({ genre: "pic", id: id.toString() })
+            const result = await ApiItem({ archive: "pic", id: id.toString() })
             if (result.success) {
                 setCover(result.data[0].name)
             }
@@ -150,7 +152,7 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
         const getPicture = async (arr: any[]) => {
             setNewImages([])
             arr.forEach(async a => {
-                const result = await ApiItem({ genre: "pic", id: a.picId.toString() })
+                const result = await ApiItem({ archive: "pic", id: a.picId.toString() })
                 if (result.success) {
                     setNewImages(n => [...n, { picId: a.picId, name: result.data[0].name }])
                 }
@@ -163,7 +165,6 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
         imagesPlus.length ? setImagePlus(imgs => imgs.filter(is => is.picId !== imgs[index].picId)) : setImagePlus(images.filter(is => is.picId !== images[index].picId))
     }
 
-    // console.log(content)
     return (
         id ||
             path2 === "news" ?
@@ -178,13 +179,13 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
                         <Input name="title" onChange={(v) => setName(v)} value={name} sx=' mg-bottom-10px ' />
                         <Input name="slug" onChange={(v) => setSlug(v)} value={slug} sx=' mg-bottom-10px ' />
                     </div>
-                    {path1 !== "news" && path1 !== "singlepage" &&
+                    {path1 !== "page" &&
                         <div className='w-full pl-2 md:w-1/2'>
                             <EditPicture src={cover ? process.env.ftp_url + cover : undefined} setPictureModal={() => { setIsEditImages(false), setIsEditCover(true), setModalOpen(true) }} />
                             {path1 === "product" ? <ImportManyPicture src={newimages.map(n => process.env.ftp_url + n.name)} setPictureModal={() => { setIsEditCover(false), setIsEditImages(true), setModalOpen(true) }} onRemove={(index) => { removePic(index) }} /> : null}
                         </div>}
                 </div>
-                <TextAreaTool value={content} onChange={(v) => { setNewContent(v) }} onClick={() => { setModalOpen(true); setIsImportIamge(true) }} importImage={importImage} />
+                {path1 !== "page" ? <TextAreaTool value={content} onChange={(v) => { setNewContent(v) }} onClick={() => { setModalOpen(true); setIsImportIamge(true) }} importImage={importImage} /> : <Textarea value={content} onChange={(v) => setNewContent(v)} />}
                 <div className='dp-flex '>
                     {id ?
                         <Button name={saving ? "..." : "save"} onClick={() => updateAnItem(currentUser.position, path1, id, body)} sx="bg-main mg-5px" disable={saving} /> :
@@ -207,7 +208,7 @@ export const EditDetailbySlug = ({ path1, path2 }: Props) => {
                         setModalOpen(false)
                     }} />
             </div > :
-            "NOT FOUND"
+            <NotFound />
     )
 }
 export const EditDetailById = ({ path1, path2 }: Props) => {
@@ -239,7 +240,7 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     const [isUpdateAvata, setIsUpdateAvata] = useState<boolean>(false)
 
     const body = {
-        coverId: coverId,
+        coverId: (coverId),
         avataId: avataId,
         username,
         position,
@@ -247,7 +248,7 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     }
 
     const getProfileById = async (id: string) => {
-        const result = await ApiItemUser({ position: currentUser.position, genre: path1, id: id })
+        const result = await ApiItemUser({ position: currentUser.position, archive: path1, id: id })
 
         if (result.success) {
 
@@ -266,11 +267,11 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
         }
     }
     useEffect(() => {
-        getProfileById(path2)
+        path1 && getProfileById(path2)
     }, [path2])
 
     const updateProfile = async (id: string, body: any) => {
-        const result = await ApiUpdateItem({ position: currentUser.position, genre: "user", id }, body)
+        const result = await ApiUpdateItem({ position: currentUser.position, archive: "user", id }, body)
         if (result.success) {
             store.dispatch(setNotice({ success: result.success, msg: result.msg, open: true }))
             store.dispatch(setRefresh())
@@ -286,13 +287,13 @@ export const EditDetailById = ({ path1, path2 }: Props) => {
     }
 
     const getPictureCover = async (id: string) => {
-        const result = await ApiItem({ genre: "pic", id: id })
+        const result = await ApiItem({ archive: "pic", id: id })
         if (result) {
             setCover(result.data[0])
         }
     }
     const getPictureAvata = async (id: string) => {
-        const result = await ApiItem({ genre: "pic", id: id })
+        const result = await ApiItem({ archive: "pic", id: id })
         if (result) {
             setAvata(result.data[0])
         }

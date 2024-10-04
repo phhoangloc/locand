@@ -41,11 +41,11 @@ export const ChangePasword = ({ sx, archive }: Props) => {
 
     const changePassword = async (confirmCode: string, data: { password: string }) => {
 
-        const resultUserById = await ApiItemUser({ position: currentUser.position, genre: "user", id: currentUser.id })
+        const resultUserById = await ApiItemUser({ position: currentUser.position, archive: "user", id: currentUser.id })
         const userbyId = resultUserById?.data
         const confirmCodeOfUserById = userbyId[0]?.confirmCode
 
-        const result = confirmCodeOfUserById === confirmCode && await ApiUpdateItem({ position: currentUser.position, genre: "user", id: currentUser.id }, data)
+        const result = confirmCodeOfUserById === confirmCode && await ApiUpdateItem({ position: currentUser.position, archive: "user", id: currentUser.id }, data)
 
 
         if (result.success) {
@@ -110,11 +110,11 @@ const ChangeEmail = ({ sx, archive }: Props) => {
 
     const changeEmail = async (confirmCode: string, data: { email: string }) => {
 
-        const resultUserById = await ApiItemUser({ position: currentUser.position, genre: "user", id: currentUser.id })
+        const resultUserById = await ApiItemUser({ position: currentUser.position, archive: "user", id: currentUser.id })
         const userbyId = resultUserById?.data
         const confirmCodeOfUserById = userbyId[0]?.confirmCode
 
-        const result = confirmCodeOfUserById === confirmCode && await ApiUpdateItem({ position: currentUser.position, genre: "user", id: currentUser.id }, data)
+        const result = confirmCodeOfUserById === confirmCode && await ApiUpdateItem({ position: currentUser.position, archive: "user", id: currentUser.id }, data)
 
         console.log(confirmCodeOfUserById)
         console.log(confirmCode)

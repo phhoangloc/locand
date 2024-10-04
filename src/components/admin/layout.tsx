@@ -1,12 +1,42 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import Menu from './menu'
+import Menu, { Menu2Layout } from './menu'
 import Header from './header'
 import store from '@/redux/store'
 import { setMenuAdmin } from '@/redux/reducer/MenuAdminReduce'
 import Login from './login'
 type Props = {
     children: React.ReactNode
+}
+export const LayoutV2 = ({ children }: Props) => {
+
+    const [currentMenu, setCurrentMenu] = useState<boolean>(store.getState().menuadmin)
+    const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
+    const update = () => {
+        store.subscribe(() => setCurrentMenu(store.getState().menuadmin))
+        store.subscribe(() => setCurrentUser(store.getState().user))
+    }
+    useEffect(() => {
+        update()
+    })
+    const [_number, set_number] = useState<number>(0)
+    if (currentUser.id) {
+        return (
+            <div className='flex w-full min-h-screen max-w-[12000px] m-auto justify-between p-2 box-border'>
+                <div className={` transition-all duration-500 h-full  z-10 w-12  sticky top-0`} >
+                    <Menu2Layout number={_number} changeNo={(n) => set_number(n)} />
+                </div>
+                <div className={`w-full-12 flex flex-col transition-all duration-500 pl-2 ${_number !== -1 ? "lg:w-full-64" : "lg:w-full-12"}`} onClick={() => set_number(-1)}>
+                    <Header />
+                    {children}
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <Login archive='admin' />
+    )
 }
 
 const Layout = ({ children }: Props) => {
@@ -39,5 +69,6 @@ const Layout = ({ children }: Props) => {
         <Login archive='admin' />
     )
 }
+
 
 export default Layout

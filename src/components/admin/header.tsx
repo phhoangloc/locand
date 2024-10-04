@@ -26,10 +26,11 @@ const Header = (props: Props) => {
     const toPage = useRouter()
 
     return (
-        <div className='flex justify-between h-12'>
-            {currentMenu ?
+        <div className='flex justify-between h-12  '>
+            <div></div>
+            {/* {currentMenu ?
                 <MenuOpenIcon className='!w-auto !h-full p-2 cursor-pointer' onClick={() => store.dispatch(setMenuAdmin(false))} /> :
-                <MenuIcon className='!w-auto !h-full p-2 cursor-pointer' onClick={() => store.dispatch(setMenuAdmin(true))} />}
+                <MenuIcon className='!w-auto !h-full p-2 cursor-pointer' onClick={() => store.dispatch(setMenuAdmin(true))} />} */}
             <div className="flex">
                 {currentUser?.id ?
                     <IconDrop

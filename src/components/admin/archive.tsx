@@ -20,9 +20,9 @@ import Input from '../tool/input/input'
 import { setNotice } from '@/redux/reducer/noticeReducer'
 import NotFound from './notfound'
 type Props = {
-    genre: string
+    archive: string
 }
-export const Archive = ({ genre }: Props) => {
+export const Archive = ({ archive }: Props) => {
 
     const [currentUser, setCurrentUser] = useState<any>(store.getState().user)
     const [currentAlert, setCurrentAlert] = useState<AlertType>(store.getState().alert)
@@ -58,7 +58,7 @@ export const Archive = ({ genre }: Props) => {
 
     const getItems = async (p: string, a: string, s: string, skip: number | undefined, li: number | undefined, sort: string) => {
         setIsLoading(true)
-        const result = await ApiItemUser({ position: p, genre: a, search: s, skip: skip, limit: li, sort: sort })
+        const result = await ApiItemUser({ position: p, archive: a, search: s, skip: skip, limit: li, sort: sort })
         if (result.error) {
             setIsPageNotFound(true)
             setIsLoading(false)
@@ -75,25 +75,23 @@ export const Archive = ({ genre }: Props) => {
         }
     }
     const getItemPlus = async (p: string, a: string, s: string, skip: number | undefined, li: number | undefined, sort: string) => {
-        const result = await ApiItemUser({ position: p, genre: a, search: s, skip: skip, limit: li, sort: sort })
+        const result = await ApiItemUser({ position: p, archive: a, search: s, skip: skip, limit: li, sort: sort })
         if (result.data?.length) {
             setIsEnd(false)
         } else {
             setIsEnd(true)
         }
     }
-
     const deleteItem = (id: string) => {
         store.dispatch(setAlert({ open: true, value: false, msg: "are you sure to want to delete this post" }))
         setId(id)
         setIsDelete(true)
     }
 
-
     useEffect(() => {
         if (currentAlert.value && isDelete) {
             const deleteItemAgain = async (p: string, a: string, id: string) => {
-                const result = await ApiDeleteItem({ position: p, genre: a, id: id })
+                const result = await ApiDeleteItem({ position: p, archive: a, id: id })
                 if (result) {
                     const interval = setInterval(() => {
                         setLoadingCurrent(v => v + 0.025)
@@ -106,12 +104,12 @@ export const Archive = ({ genre }: Props) => {
                     }, 500)
                 }
             }
-            currentUser.position && id && deleteItemAgain(currentUser.position, genre, id)
+            currentUser.position && id && deleteItemAgain(currentUser.position, archive, id)
         }
     }, [currentAlert, currentUser, isDelete, id])
     useEffect(() => {
-        currentUser.position && getItems(currentUser.position, genre, search, page * limit, limit, "")
-        currentUser.position && getItemPlus(currentUser.position, genre, search, (page + 1) * limit, limit, "")
+        currentUser.position && getItems(currentUser.position, archive, search, page * limit, limit, "")
+        currentUser.position && getItemPlus(currentUser.position, archive, search, (page + 1) * limit, limit, "")
     }, [currentUser.position, search, page, refresh])
 
     useEffect(() => {
@@ -129,21 +127,21 @@ export const Archive = ({ genre }: Props) => {
         return <NotFound />
     }
     return (
-        isLoading ? <p>loading...</p> :
-            <div className='bg-white dark:bg-slate-800 rounded m-1 shadow-md'>
-                <div className='flex h-12 justify-between relative px-2'>
-                    <div className="flex">
-                        <h3 className='text-xl font-bold h-full flex flex-col justify-center'>{genre} </h3>
-                        <AddIcon className='!w-auto !h-full p-2 cursor-pointer' onClick={() => toPage.push(genre + "/news")} />
-                    </div>
-                    <SearchBox placehoder='検索' func={(v) => setSearch(v)} />
+        <div className='bg-white dark:bg-slate-800 rounded shadow-md overflow-hidden'>
+            <div className='flex h-12 justify-between relative '>
+                <div className="flex p-2 opacity-50">
+                    <AddIcon className='!w-auto !h-full p-1 cursor-pointer' onClick={() => toPage.push(archive + "/news")} />
                 </div>
-                {items?.length ?
+                <h3 className='font-bold h-full flex flex-col justify-center'>{archive.toUpperCase()} </h3>
+                <SearchBox placehoder='search' func={(v) => setSearch(v)} />
+            </div>
+            {isLoading ? <p>loading...</p> :
+                items?.length ?
                     items.map((n: any, index: number) =>
-                        <div key={index} className={`flex h-12 transition duration-200 ruonded border-b-[1px] border-slate-100 dark:border-slate-800 even:bg-slate-100 even:dark:bg-slate-700 hover:!bg-slate-200 dark:hover:!bg-slate-500`} >
-                            <LabelOutlinedIcon className='!w-auto !h-full p-3 hidden md:block' />
-                            <div className="w-full h-full  flex flex-col justify-center px-1 cursor-pointer text-sm md:text-base">
-                                <h4 title={n.name} className={`truncate`}
+                        <div key={index} className={`flex h-14 border-b-[1px] border-slate-50 dark:border-slate-700 hover:!bg-slate-50 hover:dark:!bg-slate-700 cursor-pointer`} >
+                            <LabelOutlinedIcon className='!w-10 !h-10 p-2 m-auto hidden md:block' />
+                            <div className="w-full h-full  flex flex-col justify-center px-1  text-sm md:text-base">
+                                <h4 title={n.name} className={`truncate font-bold`}
                                     onClick={() => toPage.push(n.slug ? "/admin/" + n.archive + "/" + n.slug : "/admin/" + n.archive + "/" + n.id)}
                                 >
                                     {n.username || n.name}
@@ -151,21 +149,21 @@ export const Archive = ({ genre }: Props) => {
                                 <p className="text-xs opacity-50"> {n.position || n.updateDate && moment(n.updateDate).format("MM/DD") || moment(n.createDate).format("MM/DD")}</p>
                             </div>
                             <div className="hidden w-max md:flex">
-                                {genre === "singlepage" ?
-                                    <Link style={{ textDecoration: "none", color: "inherit" }} href={n.slug ? "/" + n.slug : "/" + n.archive + "/" + n._id} target='_blank'>
-                                        <RemoveRedEyeOutlinedIcon className=' !w-auto !h-full p-2 cursor-pointer hover:text-orange-500 ' />
+                                {archive === "page" ?
+                                    <Link className='h-max m-auto' style={{ textDecoration: "none", color: "inherit" }} href={"/" + n.slug} target='_blank'>
+                                        <RemoveRedEyeOutlinedIcon className=' !w-10 !h-10 p-2 m-auto' />
                                     </Link>
-                                    : <Link style={{ textDecoration: "none", color: "inherit" }} href={n.slug ? "/" + n.archive + "/" + n.slug : "/" + n.archive + "/" + n._id} target='_blank'>
-                                        <RemoveRedEyeOutlinedIcon className=' !w-auto !h-full p-2 cursor-pointer hover:text-orange-500 ' />
+                                    : <Link className='h-max m-auto' style={{ textDecoration: "none", color: "inherit" }} href={n.slug ? "/" + n.archive + "/" + n.slug : "/" + n.archive + "/" + n.id} target='_blank'>
+                                        <RemoveRedEyeOutlinedIcon className=' !w-10 !h-10 p-2 m-auto' />
                                     </Link>}
-                                <DeleteOutlineOutlinedIcon className=' !w-auto !h-full p-2 cursor-pointer hover:text-orange-500' onClick={() => deleteItem(n.id)} />
+                                <DeleteOutlineOutlinedIcon className=' !w-10 !h-10 p-2 m-auto' onClick={() => deleteItem(n.id)} />
                             </div>
                         </div>
 
                     ) :
-                    <div className='flex h-12 justify-between relative p-2'>there are no {genre}</div>}
-                <Pagination page={page} next={() => setPage(p => p + 1)} prev={() => setPage(p => p - 1)} end={isEnd} />
-            </div>
+                    <div className='flex h-12 justify-between relative p-2'>there are no {archive}</div>}
+            <Pagination page={page} next={() => setPage(p => p + 1)} prev={() => setPage(p => p - 1)} end={isEnd} />
+        </div>
     )
 }
 
@@ -187,7 +185,7 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
     })
 
     const toPage = useRouter()
-    const genre = "pic"
+    const archive = "pic"
     const [items, setItems] = useState<any[]>([])
     const [isEnd, setIsEnd] = useState<boolean>(true)
     const [refresh, setRefresh] = useState<number>(0)
@@ -211,7 +209,7 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
 
     const getItems = async (p: string, a: string, s: string, skip: number | undefined, li: number | undefined) => {
         setLoading(true)
-        const result = await ApiItemUser({ position: p, genre: a, search: s, skip: skip, limit: li })
+        const result = await ApiItemUser({ position: p, archive: a, search: s, skip: skip, limit: li })
         if (result.success) {
             setLoading(false)
             setItems(result.data)
@@ -221,7 +219,7 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
         }
     }
     const getItemPlus = async (p: string, a: string, s: string, skip: number | undefined, li: number | undefined) => {
-        const result = await ApiItemUser({ position: p, genre: a, search: s, skip: skip, limit: li })
+        const result = await ApiItemUser({ position: p, archive: a, search: s, skip: skip, limit: li })
         if (result.success && result.data.length) {
             setIsEnd(false)
         } else {
@@ -230,8 +228,8 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
     }
 
     useEffect(() => {
-        currentUser.position && getItems(currentUser.position, genre, search, page * limit, limit)
-        currentUser.position && getItemPlus(currentUser.position, genre, search, (page + 1) * limit, limit)
+        currentUser.position && getItems(currentUser.position, archive, search, page * limit, limit)
+        currentUser.position && getItemPlus(currentUser.position, archive, search, (page + 1) * limit, limit)
     }, [currentUser.position, refresh, page, search])
 
     const getFile = async (e: any) => {
@@ -259,16 +257,25 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
         if (currentAlert.value && isDelete) {
             const deleteImage = async (p: string, a: string, id: string) => {
                 setLoadingButton(true)
-                const result = await ApiDeleteItem({ position: p, genre: a, id: id })
-                if (result) {
+                const result = await ApiDeleteItem({ position: p, archive: a, id: id })
+                if (result.success) {
                     setI(-1)
                     setId("")
                     setLoadingButton(false)
                     setIsDelete(false)
                     setRefresh(r => r + 1)
+                    store.dispatch(setNotice({ open: true, success: false, msg: result.msg }))
+                    setTimeout(() => {
+                        store.dispatch(setNotice({ open: false, success: false, msg: "" }))
+                    }, 3000)
+                } else {
+                    store.dispatch(setNotice({ open: true, success: false, msg: result.msg }))
+                    setTimeout(() => {
+                        store.dispatch(setNotice({ open: false, success: false, msg: "" }))
+                    }, 3000)
                 }
             }
-            currentUser.position && id && deleteImage(currentUser.position, genre, id)
+            currentUser.position && id && deleteImage(currentUser.position, archive, id)
         }
     }, [currentAlert, currentUser, isDelete, id])
 
@@ -276,7 +283,7 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
         if (currentAlert.value && isUpload) {
             const UpdateImage = async (p: string, a: string, f: File) => {
                 setLoadingButton(true)
-                const result = await ApiUploadFile({ position: p, genre: a, file: f })
+                const result = await ApiUploadFile({ position: p, archive: a, file: f })
                 if (result) {
                     setLoadingButton(false)
                     setIsUpload(false)
@@ -290,7 +297,7 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
         if (currentAlert.value && isUpload && files?.length) {
             const UpdateImage = async (p: string, a: string, f: File) => {
                 setLoadingButton(true)
-                const result = await ApiUploadFile({ position: p, genre: a, file: f })
+                const result = await ApiUploadFile({ position: p, archive: a, file: f })
                 if (result) {
                     setLoadingButton(false)
                     setIsUpload(false)
@@ -320,6 +327,7 @@ export const ArchivePic = ({ edit, defaultlimit, type }: PropsArchivePic) => {
                         </div>
                         <div className="relative w-full aspect-video p-1">
                             <Input name="name" value={items[i].name} onChange={() => { }} disabled={true} />
+                            <Input name="author" value={items[i].host.username} onChange={() => { }} disabled={true} />
                             <Input name="url" value={process.env.ftp_url + "template2/" + items[i].name} onChange={() => { }} disabled={true}
                                 icon1={<ContentCopyIcon className='w-9 h-9 p-1 m-auto bg-slate-50 dark:bg-slate-800 hover:text-orange-500 cursor-pointer' onClick={() => setIsCopyLink(true)} />} />
                             <div className='flex justify-between'>

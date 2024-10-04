@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import store from '../store'
 import { setUser } from '../reducer/UserReduce'
 import { ApiCheckLogin } from '@/api/user'
-// import Loading from '@/component/home/loading'
+import Loading from '@/components/tool/loading/loading'
 
 type Props = {
     children: React.ReactNode
@@ -39,9 +39,9 @@ const Provider = ({ children }: Props) => {
     }, [currentRefresh])
 
     if (loading) {
-        return (<div>...</div>)
+        return (<div className='bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white w-screen h-screen flex flex-col justify-center text-center' ><Loading /></div>)
     }
-    return children
+    return (<div className='bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white'>{children}</div>)
 }
 
 export default Provider

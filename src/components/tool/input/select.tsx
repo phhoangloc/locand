@@ -18,7 +18,7 @@ const Select = ({ data, title, func, sx }: Props) => {
                 </div>
                 <KeyboardArrowDownIcon className='!w-6 !h-6 my-3' />
             </div>
-            <div className={`transition-all duration-100 overflow-hidden absolute z-[1]  bg-white dark:bg-slate-800 top-0 w-full`} style={{ height: drop && data?.length ? data.length * 3 + "rem" : 0 }} >
+            <div className={`transition-all duration-100 overflow-hidden absolute z-[1]  bg-white dark:bg-slate-800 top-0 w-full shadow-md shadow-slate-200 dark:shadow-slate-900`} style={{ height: drop && data?.length ? data.length * 3 + "rem" : 0 }} >
                 {data?.length ? data.map((d: { title: string, func: (v: string) => void }, index: number) =>
                     <div key={index} className='flex flex-col justify-center opacity-50 hover:opacity-100 p-1 box-border h-12 cursor-pointer text-center ' onClick={() => { d.func(d.title), setDrop(false) }}>
                         {d?.title}

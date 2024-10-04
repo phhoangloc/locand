@@ -3,7 +3,7 @@ import axios from "axios"
 
 export type BodyTypeWithPosition = {
     position: string,
-    genre?: string,
+    archive?: string,
     id?: string,
     slug?: string,
     search?: string,
@@ -29,11 +29,11 @@ export const ApiCheckLogin = async () => {
 
 }
 
-export const ApiItemUser = async ({ position, genre, search, id, slug, sort, skip, limit }: BodyTypeWithPosition) => {
+export const ApiItemUser = async ({ position, archive, search, id, slug, sort, skip, limit }: BodyTypeWithPosition) => {
     try {
         const result = await axios.get(process.env.api_url + "api/" + position +
-            "/" + genre +
-            "?genre=" + genre +
+            "/" + archive +
+            "?archive=" + archive +
             "&search=" + `${search ? search : ""}` +
             "&id=" + `${id ? id : ""}` +
             "&slug=" + `${slug ? slug : ""}` +
@@ -56,10 +56,10 @@ export const ApiItemUser = async ({ position, genre, search, id, slug, sort, ski
     }
 }
 
-export const ApiCreateItem = async ({ position, genre }: BodyTypeWithPosition, body: any) => {
+export const ApiCreateItem = async ({ position, archive }: BodyTypeWithPosition, body: any) => {
     const result = await axios.post(process.env.api_url + "api/" +
         position +
-        "/" + genre,
+        "/" + archive,
         body,
         {
             headers: {
@@ -69,10 +69,10 @@ export const ApiCreateItem = async ({ position, genre }: BodyTypeWithPosition, b
         })
     return (result.data)
 }
-export const ApiUpdateItem = async ({ position, genre, id }: BodyTypeWithPosition, body: any) => {
+export const ApiUpdateItem = async ({ position, archive, id }: BodyTypeWithPosition, body: any) => {
     const result = await axios.put(process.env.api_url + "api/" +
         position +
-        "/" + genre +
+        "/" + archive +
         "?id=" + id,
         body,
         {
@@ -83,10 +83,10 @@ export const ApiUpdateItem = async ({ position, genre, id }: BodyTypeWithPositio
         })
     return (result.data)
 }
-export const ApiDeleteItem = async ({ position, genre, id }: BodyTypeWithPosition) => {
+export const ApiDeleteItem = async ({ position, archive, id }: BodyTypeWithPosition) => {
     const result = await axios.delete(process.env.api_url + "api/" +
         position +
-        "/" + genre +
+        "/" + archive +
         "?id=" + id,
         {
             headers: {
@@ -97,10 +97,10 @@ export const ApiDeleteItem = async ({ position, genre, id }: BodyTypeWithPositio
     return (result.data)
 }
 
-export const ApiUploadFile = async ({ position, genre, file }: BodyTypeWithPosition) => {
+export const ApiUploadFile = async ({ position, archive, file }: BodyTypeWithPosition) => {
     const formData = new FormData()
     file && formData.append("file", file)
-    const fileUpload = await axios.post(process.env.api_url + "api/" + position + "/" + genre, formData, {
+    const fileUpload = await axios.post(process.env.api_url + "api/" + position + "/" + archive, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': localStorage.token,

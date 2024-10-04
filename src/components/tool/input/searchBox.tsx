@@ -10,14 +10,11 @@ const SearchBox = ({ placehoder, func }: Props) => {
 
     const inputRef = useRef<any>("")
 
-    const inputStyle: React.CSSProperties = { width: 0, margin: 0, padding: 0, border: 0, transition: "all 0.25s", borderRadius: "5px" }
-    const inputFocusStyle: React.CSSProperties = { width: "200px", border: "1px solid #aaa", padding: "0 5px" }
-
     const [isSeaching, setIsSearching] = useState<boolean>(false)
     return (
         <div className='flex w-max'>
             <input
-                className={`bg-inherit w-0 m-0 p-0 transition-all duration-200 border-[0px] rounded text-sm  ${isSeaching ? "w-52 px-1 !bg-slate-50 dark:!bg-slate-900" : ""}`}
+                className={`bg-inherit w-0 h-10 p-0 transition-all duration-200 border-[0px] rounded text-sm m-auto border-slate-50 dark:border-slate-700 ${isSeaching ? "w-52 px-1 border-[1px]" : ""}`}
                 ref={inputRef}
                 type="text"
                 placeholder={placehoder}

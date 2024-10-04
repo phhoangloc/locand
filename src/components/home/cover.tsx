@@ -17,7 +17,8 @@ const Cover = (props: Props) => {
                     <Button onClick={() => console.log("docs")} name="Doc" sx='!mx-1 !my-1 md:!my-4' />
                 </div>
             </div>
-        </div>)
+        </div>
+    )
 }
 
 export default Cover

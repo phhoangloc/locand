@@ -1,4 +1,4 @@
-import Layout from '@/components/admin/layout'
+import Layout, { LayoutV2 } from '@/components/admin/layout'
 import React from 'react'
 
 type Props = {
@@ -8,9 +8,9 @@ type Props = {
 const layout = ({ children }: Props) => {
     return (
         <div className='bg-slate-100 dark:bg-slate-900 min-h-screen dark:text-white'>
-            <Layout>
+            <LayoutV2>
                 {children}
-            </Layout>
+            </LayoutV2>
         </div>
     )
 }

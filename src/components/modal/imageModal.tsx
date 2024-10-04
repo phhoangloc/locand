@@ -39,7 +39,7 @@ const ImageModal = ({ modalOpen, onCanel, onSubmit, onSendArray }: Props) => {
             reader.readAsDataURL(file);
             reader.onloadend = async function () {
                 setLoading(true)
-                const result = currentUser.position && await ApiUploadFile({ position: currentUser.position, genre: "pic", file: file })
+                const result = currentUser.position && await ApiUploadFile({ position: currentUser.position, archive: "pic", file: file })
                 if (result) {
                     setLoading(false)
                     setRefresh(n => n + 1)
@@ -52,7 +52,7 @@ const ImageModal = ({ modalOpen, onCanel, onSubmit, onSendArray }: Props) => {
 
     const [data, setData] = useState<any[]>([])
     const getMedia = async () => {
-        const result = await ApiItemUser({ position: currentUser.position, genre: "pic" })
+        const result = await ApiItemUser({ position: currentUser.position, archive: "pic" })
         if (result.success) {
             setData(result.data)
         } else {

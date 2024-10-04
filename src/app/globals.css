@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+    letter-spacing: 0.25px;
+}
+
+.dangerous_box h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.dangerous_box h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+
+}
+
+.dangerous_box h3 {
+    font-size: 1.15rem;
+    font-weight: bold;
+
+}
+
+.dangerous_box h4 {
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.dangerous_box h5 {
+    font-size: 0.9rem;
+    font-weight: bold;
+
+}
+
+.dangerous_box ul {
+    padding-left: 25px;
+}
+
+.dangerous_box ul li {
+    list-style: disc;
+}
+
+.ani_bottom_to_top {
+    animation: bot_to_top 0.5s;
+}
+
+@keyframes bot_to_top {
+    0% {
+        transform: translateY(25%);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateY(25%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0%);
+        opacity: 75%;
+    }
+}
