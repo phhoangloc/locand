@@ -171,16 +171,16 @@ export const Menu2Layout = ({ number, changeNo }: Props) => {
 
     return (
         <div className={`${index === -1 ? "w-12" : "w-64"} transition-all duration-500 h-screen rounded`}>
-            <div className="bg-white dark:bg-slate-800 flex w-full h-full shadow-md">
-                <div className='w-12'>
+            <div className=" flex w-full h-full shadow-md">
+                <div className='w-12 border-r-[1px] border-slate-50 dark:border-slate-800'>
                     {
-                        menus.map((m, i) => <div key={i} className={`flex overflow-hidden rounded cursor-pointer w-max m-auto ${i === index ? "opacity-100" : "opacity-75"} hover:opacity-100`} onClick={() => { setIndex(-1), setTimeout(() => { setIndex(i) }, 1); }}>
+                        menus.map((m, i) => <div key={i} className={`flex overflow-hidden rounded cursor-pointer w-max m-auto ${i === index ? "opacity-100" : "opacity-50"} hover:opacity-100`} onClick={() => { setIndex(-1), setTimeout(() => { setIndex(i) }, 1); }}>
                             {m.icon}
                         </div>
                         )
                     }
                 </div>
-                <div className={`w-52 border-l-[1px] border-slate-100 dark:border-slate-900`}>
+                <div className={`w-52`}>
                     <p className='h-12 text-xl p-4 flex flex-col justify-center font-bold'>{menus[index]?.title}</p>
                     {menus[index]?.children.map((child: any, indexChild: number) =>
                         child?.position !== "admin" || child.position === currentUser.position ?

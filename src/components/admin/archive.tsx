@@ -127,7 +127,7 @@ export const Archive = ({ archive }: Props) => {
         return <NotFound />
     }
     return (
-        <div className='bg-white dark:bg-slate-800 rounded shadow-md overflow-hidden'>
+        <div className='rounded overflow-hidden'>
             <div className='flex h-12 justify-between relative '>
                 <div className="flex p-2 opacity-50">
                     <AddIcon className='!w-auto !h-full p-1 cursor-pointer' onClick={() => toPage.push(archive + "/news")} />
@@ -138,7 +138,7 @@ export const Archive = ({ archive }: Props) => {
             {isLoading ? <p>loading...</p> :
                 items?.length ?
                     items.map((n: any, index: number) =>
-                        <div key={index} className={`flex h-14 border-b-[1px] border-slate-50 dark:border-slate-700 hover:!bg-slate-50 hover:dark:!bg-slate-700 cursor-pointer`} >
+                        <div key={index} className={`flex h-14 border-b-[1px] border-slate-50 dark:border-slate-800 hover:!bg-slate-50 hover:dark:!bg-slate-800 cursor-pointer`} >
                             <LabelOutlinedIcon className='!w-10 !h-10 p-2 m-auto hidden md:block' />
                             <div className="w-full h-full  flex flex-col justify-center px-1  text-sm md:text-base">
                                 <h4 title={n.name} className={`truncate font-bold`}

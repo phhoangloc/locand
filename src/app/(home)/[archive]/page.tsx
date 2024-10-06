@@ -26,8 +26,9 @@ const page = ({ params }: Props) => {
     }, [])
     return (
         loading ? <Loading /> :
-            content ? <div className="w-full min-h-screen dangerous_box" dangerouslySetInnerHTML={{ __html: content }}>
-            </div> :
+            content ?
+                <div className="w-full min-h-screen dangerous_box" dangerouslySetInnerHTML={{ __html: content }}>
+                </div> :
                 <div className='min-h-screen flex flex-col justify-center'>
                     <NotFound />
                 </div>

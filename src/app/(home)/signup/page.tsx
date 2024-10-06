@@ -1,5 +1,5 @@
 
-import Signup from '@/components/home/signup'
+import Signup from '@/components/admin/signup'
 import React from 'react'
 
 type Props = {}

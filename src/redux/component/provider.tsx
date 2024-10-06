@@ -39,9 +39,9 @@ const Provider = ({ children }: Props) => {
     }, [currentRefresh])
 
     if (loading) {
-        return (<div className='bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white w-screen h-screen flex flex-col justify-center text-center' ><Loading /></div>)
+        return (<div className='w-screen h-screen flex flex-col justify-center text-center' ><Loading /></div>)
     }
-    return (<div className='bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white'>{children}</div>)
+    return (<div className='bg-slate-100 '>{children}</div>)
 }
 
 export default Provider

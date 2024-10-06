@@ -61,16 +61,16 @@ export const DetailCard = ({ scroll, data, sendChapter }: PropsDetail) => {
 
 
     return (
-        <div className={`w-5/6 shadow-lg m-auto bg-white flex h-max rounded `}>
-            <div className={`flex flex-col justify-between w-16 bg-slate-50`}>
+        <div className={`w-full h-max shadow-lg m-auto bg-white flex rounded `}>
+            <div className={`flex flex-col justify-between w-16 bg-slate-50 `}>
                 <HomeIcon className='!w-12 !h-12 cursor-pointer p-2 text-orange-500 mx-auto' onClick={() => toPage.push("/")} />
                 <h3 className='flex flex-col justify-center text-2xl font-bold text-orange-500' style={{ writingMode: "vertical-rl" }}>{data?.archive}</h3>
                 {data?.genre !== "page" && <ArrowBackIcon className='!w-12 !h-12 cursor-pointer p-2 text-orange-500 mx-auto' onClick={() => toPage.back()} />}
             </div>
             <div className="w-full-16">
-                <div className={`h-max text-center`}>
+                <div className={`w-full aspect-[1.5] text-center relative`}>
                     {data?.cover?.name ?
-                        <Image src={process.env.ftp_url + data?.cover?.name} width={500} height={500} alt='cover' style={{ objectFit: "cover", width: "auto", minHeight: "500px", maxHeight: "700px", margin: "auto" }} priority={true} />
+                        <Image src={process.env.ftp_url + data?.cover?.name} fill alt='cover' style={{ objectFit: "cover" }} priority={true} />
                         : <div className='w-full aspect-square text-center flex flex-col justify-center'>NO IMAGE</div>
                     }
                 </div>

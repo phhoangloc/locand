@@ -20,9 +20,10 @@ const DropMenu = (props: Props) => {
 
     const toPage = useRouter()
     return (
-        <div className="flex">
+        <div className="">
             {currentUser?.id ?
                 <IconDrop
+                    sx='bg-white'
                     icon={currentUser?.avata ? <Image src={process.env.ftp_url + currentUser.avata.name} fill className='object-cover cursor-pointer' alt='avata' /> : <PersonIcon className='!w-auto !h-full  cursor-pointer' />}
                     data={[
                         {
@@ -35,6 +36,7 @@ const DropMenu = (props: Props) => {
                         }
                     ]} /> :
                 <IconDrop
+                    sx='bg-white'
                     icon={<PersonIcon className='!w-auto !h-full p-2 cursor-pointer' />}
                     data={[
                         {
